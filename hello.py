@@ -19,7 +19,7 @@ calibration_coefficients = [
 ]
 
 def get_n42_paths(folder_name: str) -> list[Path]:
-    return sorted(list((Path.cwd() / folder_name).glob("*.n42*")))
+    return sorted(list((Path.cwd() / "samples" / folder_name).glob("*.n42*")))
 
 def read_n42(file: Path) -> bq.Spectrum:
     sword_num = int(file.name.split("@")[0].split('H')[-1]) # since each file starts with CH3@...
