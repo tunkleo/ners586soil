@@ -6,7 +6,9 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "becquerel>=0.6.0",
+    "jupyter>=1.1.1",
     "lxml>=5.3.2",
     "matplotlib>=3.10.1",
+    "notebook>=7.4.0",
     "rase>=0.1.0",
 ]

@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import becquerel as bq
 from bs4 import BeautifulSoup
 import numpy as np
-
+from datetime import datetime, timedelta
 
 calibration_coefficients = [
     [-52.366, 0.45616, 0.0],  # Ch 0
@@ -20,24 +20,58 @@ calibration_coefficients = [
 def get_n42_paths(folder_name: str) -> list[Path]:
     return sorted(list((Path.cwd() / "samples" / folder_name).glob("*.n42*")))
 
-def read_n42(file: Path) -> bq.Spectrum:
+def get_sword_num(file: Path) -> int:
     sword_num = int(file.name.split("@")[0].split('H')[-1]) # since each file starts with CH3@...
+    return sword_num
+
+def convert_to_timedelta(time: str) -> timedelta:
+    time = time.split('S')[0] + '000S'
+    time = datetime.strptime(time, "PT%HH%MM%S.%fS").time()
+    time_delta = timedelta(hours=time.hour,
+                           minutes=time.minute,
+                           seconds=time.second,
+                           microseconds=time.microsecond)
+    return time_delta
+
+def read_n42(file: Path) -> bq.Spectrum:
+    sword_num = get_sword_num(file)
+    print(sword_num)
+    print(str(file))
     with open(file, 'r') as f:
         soup = BeautifulSoup(f, 'xml')
-    spectrum = soup.find_all('ChannelData')[0].text
-    spectrum = [int(x) for x in spectrum.split()]
+
+    live_time = soup.find_all('LiveTimeDuration')[0].text
+    live_time = convert_to_timedelta(live_time)
+
+    real_time = soup.find_all('RealTimeDuration')[0].text
+    real_time = convert_to_timedelta(real_time)
+
+    start_time = soup.find_all('StartDateTime')[0].text
+    start_time = datetime.strptime(start_time, "%Y-%m-%dT%H:%M:%S-04:00")
+
+
+    spectrum_kwargs = {
+        'start_time': start_time,
+        'livetime': live_time.total_seconds(),
+        'realtime': real_time.total_seconds(),
+    }
 
     coefficients = calibration_coefficients[sword_num]
     # print(f'{file}: {coefficients}')
+    cal = bq.Calibration("p[0] + p[1] * x", coefficients[:2])
 
-    def energy_calculator(channel: int) -> float:
-        return coefficients[0] + coefficients[1] * channel + coefficients[2] * channel**2
+    spectrum = soup.find_all('ChannelData')[0].text
+    spectrum = [int(x) for x in spectrum.split()]
+    adc_like = []
+    for i in range(len(spectrum)):
+        adc_like.extend([i]*spectrum[i])
 
-    energies = [energy_calculator(channel) for channel in range(len(spectrum))]
+    spectrum = bq.Spectrum.from_listmode(adc_like, **spectrum_kwargs)
+    spectrum.apply_calibration(cal)
+    common_bins = np.arange(0, 2000, .1)
+    spectrum = spectrum.rebin(common_bins)
 
-    spectrum = [spectrum[i] if energy > 60 else 0 for i, energy in enumerate(energies)]
-
-    return np.array([energies, spectrum])
+    return spectrum
 
 def main():
     print("Hello from 586projectdata!")
