@@ -35,21 +35,15 @@ def convert_to_timedelta(time: str) -> timedelta:
 
 def read_n42(file: Path) -> bq.Spectrum:
     sword_num = get_sword_num(file)
-    print(sword_num)
-    print(str(file))
     with open(file, 'r') as f:
         soup = BeautifulSoup(f, 'xml')
 
     live_time = soup.find_all('LiveTimeDuration')[0].text
     live_time = convert_to_timedelta(live_time)
-
     real_time = soup.find_all('RealTimeDuration')[0].text
     real_time = convert_to_timedelta(real_time)
-
     start_time = soup.find_all('StartDateTime')[0].text
     start_time = datetime.strptime(start_time, "%Y-%m-%dT%H:%M:%S-04:00")
-
-
     spectrum_kwargs = {
         'start_time': start_time,
         'livetime': live_time.total_seconds(),
@@ -62,16 +56,17 @@ def read_n42(file: Path) -> bq.Spectrum:
 
     spectrum = soup.find_all('ChannelData')[0].text
     spectrum = [int(x) for x in spectrum.split()]
-    adc_like = []
-    for i in range(len(spectrum)):
-        adc_like.extend([i]*spectrum[i])
+    # adc_like = []
+    # for i in range(len(spectrum)):
+    #     adc_like.extend([i]*spectrum[i])
 
-    spectrum = bq.Spectrum.from_listmode(adc_like, **spectrum_kwargs)
+    spectrum = bq.Spectrum(spectrum, **spectrum_kwargs)
     spectrum.apply_calibration(cal)
     common_bins = np.arange(0, 2000, .1)
     spectrum = spectrum.rebin(common_bins)
 
     return spectrum
+
 
 def main():
     print("Hello from 586projectdata!")
