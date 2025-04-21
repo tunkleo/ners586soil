@@ -1,3 +1,4 @@
+from ast import Dict
 from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -101,7 +102,19 @@ def read_manifest() -> pd.DataFrame:
     return bottle_manifest
 
 
+def read_efficiencies() -> Dict:
+    efficiencies = {}
+    for file in (Path.cwd() / "simulated_efficiencies").glob("*.out"):
+        energy = int(file.stem.split('_')[-1])
+        efficiencies[energy] = []
+        with file.open('r') as f:
+            for line in f:
+                if len(line.split()) > 1 and line.split()[1] == 'sum':
+                    efficiencies[energy].append(float(line.split()[-1]))
+    return efficiencies
+
 
 if __name__ == "__main__":
     # test manifest
-    print(read_manifest())
+    # print(read_manifest())
+    print(read_efficiencies())
