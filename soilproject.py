@@ -6,45 +6,66 @@ from bs4 import BeautifulSoup
 import numpy as np
 from datetime import datetime, timedelta
 import utils
+from scipy import interpolate
 
 
 
 def main():
-    print("Hello from 586projectdata!")
-    # get n42 files
-    background_n42_files = get_n42_paths("background")
-    calibration_n42_files = get_n42_paths("energy_calibration")
-    open_pit_mine_n42_files = get_n42_paths("soil_openpit")
+    print("Start geometric efficiency calibration...")
+    calibration_names = ["2275411", "2275412",
+                         "2339312", "2339314",
+                         "2339311"]
+    manifest = utils.read_manifest()  # dict of bottle info
+    efficiencies = utils.read_efficiencies()  # dict of efficiencies
 
-    # read n42 files
-    background_spectra = [read_n42(file) for file in background_n42_files]
-    calibration_spectra = [read_n42(file) for file in calibration_n42_files]
-    open_pit_mine_spectra = [read_n42(file) for file in open_pit_mine_n42_files]
+    bottle_efficiencies = {}
+    # read in calibration bottles
+    for name in calibration_names:
+        # note that this uses 20_000 bins from 0 to 2_000 keV
+        spectrum = utils.get_corrected_spectrum(f'serial_{name}')
+
+        # get cps under specific peaks: 662, 1173, 1333
+        bottle_efficiencies[name] = {}
+        peaks = [662, 1173, 1333]
+        gamma_info = manifest[name]['gamma_info']
+        for peak in peaks:
+            cps, _ = utils.get_cps_peak(spectrum, peak)
+            overall_efficiency = cps / gamma_info[gamma_info['energy'] == peak]['activity_cps'].values[0]
+            intrinsic_efficiency = efficiencies[peak]
+            geometry_efficiency = overall_efficiency / intrinsic_efficiency
+            bottle_efficiencies[name][peak] = geometry_efficiency
+    print(bottle_efficiencies)
+
+    energy_splines = {}
+    # setup spline interpolation with volumes and densities resulting in efficiencies per energy
+    volumes = [manifest[name]['volume'] for name in calibration_names]
+    densities = [manifest[name]['density'] for name in calibration_names]
+    efficiencies = [bottle_efficiencies[name][662] for name in calibration_names]
+    energy_splines[662] = interpolate.bisplrep(volumes, densities, efficiencies)
+
+    volumes = [manifest[name]['volume'] for name in calibration_names]
+    densities = [manifest[name]['density'] for name in calibration_names]
+    efficiencies = [bottle_efficiencies[name][1173] for name in calibration_names]
+    energy_splines[1173] = interpolate.bisplrep(volumes, densities, efficiencies)
+
+    volumes = [manifest[name]['volume'] for name in calibration_names]
+    densities = [manifest[name]['density'] for name in calibration_names]
+    efficiencies = [bottle_efficiencies[name][1333] for name in calibration_names]
+    energy_splines[1333] = interpolate.bisplrep(volumes, densities, efficiencies)
+
+    # read in soil samples
+    print("Start reading soil samples...")
+    soil_low = utils.get_corrected_spectrum("soil_tailing11")
+    soil_medium = utils.get_corrected_spectrum("soil_tailing3")
+    soil_high = utils.get_corrected_spectrum("soil_openpit")
+
 
 
     graphing_folder = Path.cwd() / "graphs"
     graphing_folder.mkdir(exist_ok=True)
 
 
-
-
-    # for index in range(8):
-    #     # print(background_spectra[index])
-    #     plt.plot(background_spectra[index][0], background_spectra[index][1])
-    #     plt.savefig(graphing_folder / f"background{index}.png")
-    #     plt.close()
-
-    #     # plot calibration spectra
-    #     plt.plot(calibration_spectra[index][0], calibration_spectra[index][1])
-    #     plt.savefig(graphing_folder / f"calibration{index}.png")
-    #     plt.close()
-
-    #     # plot open pit mine spectra
-    #     plt.plot(open_pit_mine_spectra[index][0], open_pit_mine_spectra[index][1])
-    #     plt.savefig(graphing_folder / f"open_pit_mine{index}.png")
-    #     plt.close()
-
-    
+ 
 
     
 
