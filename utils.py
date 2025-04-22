@@ -106,12 +106,12 @@ def get_uncorrected_spectrum(folder_name: str) -> bq.Spectrum:
 
 
 def get_cps_peak(spectrum: bq.Spectrum, energy: int) -> float:
-    # assume 20_000 bins from 0 to 2_000 keV
+    # assume 2_000 bins from 0 to 2_000 keV
     cps_values = spectrum.cps_vals
     # print(cps_values)
     cps_values = np.maximum(cps_values, 0)
     spectrum_1s = bq.Spectrum(cps_values)
-    region_bounds = (int(max(1, energy*10 - (900*energy/1100))), int(min(20_000, energy*10 + (900*energy/1100))))
+    region_bounds = (int(max(1, energy - (90*energy/1100))), int(min(2_000, energy + (90*energy/1100))))
     # print(region_bounds)
     fitter = bq.Fitter(
     ["gauss"],
@@ -165,7 +165,7 @@ def read_n42(file: Path) -> bq.Spectrum:
 
     spectrum = bq.Spectrum(spectrum, **spectrum_kwargs)
     spectrum.apply_calibration(cal)
-    common_bins = np.arange(0, 2000, .1)
+    common_bins = np.arange(0, 2000, 1)
     spectrum = spectrum.rebin(common_bins)
 
     return spectrum
@@ -176,5 +176,5 @@ def read_n42(file: Path) -> bq.Spectrum:
 
 if __name__ == "__main__":
     # test manifest
-    print(read_manifest())
+    # print(read_manifest())
     print(read_efficiencies())
