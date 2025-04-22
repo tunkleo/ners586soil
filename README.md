@@ -16,9 +16,11 @@ If you have trouble with installation, check their [official documentation](http
 ## Usage
 First clone this repository:
 ```git clone git@github.com:tunkleo/ners586soil.git```  
+
 ```cd ners586soil```
 
 Currently, the jupyter notebook, testground.ipynb, is the best way to run this code. Otherwise, you can use the following commands to run the python scripts:
 
 ```uv run soilproject.py```
+
 ```uv run utils.py```
