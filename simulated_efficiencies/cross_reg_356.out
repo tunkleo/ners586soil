@@ -1,0 +1,211 @@
+[ T-Cross ]
+    title = Energy distribution in region mesh
+     mesh =  reg            # mesh type is region-wise
+      reg =    8            # number of crossing regions
+      non     r-from    r-to       area
+      1       301       201        1.000000    
+      2       302       202        1.000000    
+      3       303       203        1.000000    
+      4       304       204        1.000000    
+      5       305       205        1.000000    
+      6       306       206        1.000000    
+      7       307       207        1.000000    
+      8       308       208        1.000000    
+   e-type =    1            # e-mesh is given by the below data
+       ne =      1          # number of e-mesh points
+#    data = ( e(i), i = 1, ne + 1 )
+            3.51000E-01  3.61000E-01
+  eng2let =    0            # (D=0) Flag to convert energy to LET, 0: not convert, 1: convert
+     unit =    1            # unit is [1/cm^2/source]
+     axis =  eng            # axis of output
+     file = cross_reg.out   # file name of output for the above axis
+   output = flux            # surface crossing flux
+     part =  photon   
+# kf/name :  22       
+   epsout =    1            # (D=0) generate eps file by ANGEL
+#    used :        main (  %)        temp (  %)       total (  %)
+#  memory :          31 (  0)           0 (  0)          31 (  0)
+
+#------------------------------------------------------------------------------
+#newpage:
+#   no. =    1   reg = 301 - 201
+
+x: Energy [MeV]
+y:   Flux  [1/cm^2/source]                 
+p: xlin ylog afac(0.8) form(0.9)
+h: n            x            y(photon  ),hh0l n 
+#  e-lower      e-upper        photon    r.err 
+   3.5100E-01   3.6100E-01   4.9295E-02  0.0127
+
+#   sum over                 4.9295E-02
+'no. =    1   reg = 301 - 201'
+msuc: {\huge Energy distribution in region mesh}
+msdr: {\it plotted by \ANGEL \version}
+msdl: {\it calculated by \PHITS  3.34}
+wt: s(0.7)
+\vspace{-3}
+  region surface crossing
+  area  &=&   1.0000E+00 [cm^2]
+e:
+
+#------------------------------------------------------------------------------
+ newpage:
+#   no. =    2   reg = 302 - 202
+
+x: Energy [MeV]
+y:   Flux  [1/cm^2/source]                 
+p: xlin ylog afac(0.8) form(0.9)
+h: n            x            y(photon  ),hh0l n 
+#  e-lower      e-upper        photon    r.err 
+   3.5100E-01   3.6100E-01   4.7503E-02  0.0051
+
+#   sum over                 4.7503E-02
+'no. =    2   reg = 302 - 202'
+msuc: {\huge Energy distribution in region mesh}
+msdr: {\it plotted by \ANGEL \version}
+msdl: {\it calculated by \PHITS  3.34}
+wt: s(0.7)
+\vspace{-3}
+  region surface crossing
+  area  &=&   1.0000E+00 [cm^2]
+e:
+
+#------------------------------------------------------------------------------
+ newpage:
+#   no. =    3   reg = 303 - 203
+
+x: Energy [MeV]
+y:   Flux  [1/cm^2/source]                 
+p: xlin ylog afac(0.8) form(0.9)
+h: n            x            y(photon  ),hh0l n 
+#  e-lower      e-upper        photon    r.err 
+   3.5100E-01   3.6100E-01   4.8719E-02  0.0052
+
+#   sum over                 4.8719E-02
+'no. =    3   reg = 303 - 203'
+msuc: {\huge Energy distribution in region mesh}
+msdr: {\it plotted by \ANGEL \version}
+msdl: {\it calculated by \PHITS  3.34}
+wt: s(0.7)
+\vspace{-3}
+  region surface crossing
+  area  &=&   1.0000E+00 [cm^2]
+e:
+
+#------------------------------------------------------------------------------
+ newpage:
+#   no. =    4   reg = 304 - 204
+
+x: Energy [MeV]
+y:   Flux  [1/cm^2/source]                 
+p: xlin ylog afac(0.8) form(0.9)
+h: n            x            y(photon  ),hh0l n 
+#  e-lower      e-upper        photon    r.err 
+   3.5100E-01   3.6100E-01   4.7781E-02  0.0051
+
+#   sum over                 4.7781E-02
+'no. =    4   reg = 304 - 204'
+msuc: {\huge Energy distribution in region mesh}
+msdr: {\it plotted by \ANGEL \version}
+msdl: {\it calculated by \PHITS  3.34}
+wt: s(0.7)
+\vspace{-3}
+  region surface crossing
+  area  &=&   1.0000E+00 [cm^2]
+e:
+
+#------------------------------------------------------------------------------
+ newpage:
+#   no. =    5   reg = 305 - 205
+
+x: Energy [MeV]
+y:   Flux  [1/cm^2/source]                 
+p: xlin ylog afac(0.8) form(0.9)
+h: n            x            y(photon  ),hh0l n 
+#  e-lower      e-upper        photon    r.err 
+   3.5100E-01   3.6100E-01   4.8893E-02  0.0051
+
+#   sum over                 4.8893E-02
+'no. =    5   reg = 305 - 205'
+msuc: {\huge Energy distribution in region mesh}
+msdr: {\it plotted by \ANGEL \version}
+msdl: {\it calculated by \PHITS  3.34}
+wt: s(0.7)
+\vspace{-3}
+  region surface crossing
+  area  &=&   1.0000E+00 [cm^2]
+e:
+
+#------------------------------------------------------------------------------
+ newpage:
+#   no. =    6   reg = 306 - 206
+
+x: Energy [MeV]
+y:   Flux  [1/cm^2/source]                 
+p: xlin ylog afac(0.8) form(0.9)
+h: n            x            y(photon  ),hh0l n 
+#  e-lower      e-upper        photon    r.err 
+   3.5100E-01   3.6100E-01   4.7848E-02  0.0056
+
+#   sum over                 4.7848E-02
+'no. =    6   reg = 306 - 206'
+msuc: {\huge Energy distribution in region mesh}
+msdr: {\it plotted by \ANGEL \version}
+msdl: {\it calculated by \PHITS  3.34}
+wt: s(0.7)
+\vspace{-3}
+  region surface crossing
+  area  &=&   1.0000E+00 [cm^2]
+e:
+
+#------------------------------------------------------------------------------
+ newpage:
+#   no. =    7   reg = 307 - 207
+
+x: Energy [MeV]
+y:   Flux  [1/cm^2/source]                 
+p: xlin ylog afac(0.8) form(0.9)
+h: n            x            y(photon  ),hh0l n 
+#  e-lower      e-upper        photon    r.err 
+   3.5100E-01   3.6100E-01   4.8707E-02  0.0051
+
+#   sum over                 4.8707E-02
+'no. =    7   reg = 307 - 207'
+msuc: {\huge Energy distribution in region mesh}
+msdr: {\it plotted by \ANGEL \version}
+msdl: {\it calculated by \PHITS  3.34}
+wt: s(0.7)
+\vspace{-3}
+  region surface crossing
+  area  &=&   1.0000E+00 [cm^2]
+e:
+
+#------------------------------------------------------------------------------
+ newpage:
+#   no. =    8   reg = 308 - 208
+
+x: Energy [MeV]
+y:   Flux  [1/cm^2/source]                 
+p: xlin ylog afac(0.8) form(0.9)
+h: n            x            y(photon  ),hh0l n 
+#  e-lower      e-upper        photon    r.err 
+   3.5100E-01   3.6100E-01   4.7636E-02  0.0051
+
+#   sum over                 4.7636E-02
+'no. =    8   reg = 308 - 208'
+msuc: {\huge Energy distribution in region mesh}
+msdr: {\it plotted by \ANGEL \version}
+msdl: {\it calculated by \PHITS  3.34}
+wt: s(0.7)
+\vspace{-3}
+  region surface crossing
+  area  &=&   1.0000E+00 [cm^2]
+e:
+ 
+# Information for Restart Calculation
+# This calculation was newly started
+# istdev =  2 # 1:Batch variance, 2:History variance
+# resc2  = 1.00000000000000000E+06 # Total source weight or Total source weight / maxcas
+# resc3  = 1.00000000000000000E+06 # Total history number or Total batch number
+# maxcas =      100000 # History / Batch, only used for istdev=1
+# bitrseed = 0101101000001110011101111011110101001001010001111010111000101101 # bit data of rseed

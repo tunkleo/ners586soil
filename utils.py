@@ -42,7 +42,7 @@ def read_manifest() -> pd.DataFrame:
                                  'Branching Ratio (%)': 'branching_ratio',
                                  'Gammas per second': 'activity_cps'},
                          inplace=True)
-        decay_time = (datetime(2025, 4, 15) - datetime(2024, 6, 23)).total_seconds() / (3600 * 24 * 365.25)
+        decay_time = (datetime(2025, 4, 15) - datetime(2021, 11, 1)).total_seconds() / (3600 * 24 * 365.25)
 
         decay_constants = np.log(2) / gamma_info['half_life']
         gamma_info['activity_cps'] = np.exp(-decay_constants * decay_time) * gamma_info['activity_cps']
@@ -62,7 +62,7 @@ def read_efficiencies() -> Dict:
             for line in f:
                 if len(line.split()) > 1 and line.split()[1] == 'sum':
                     efficiencies[energy].append(float(line.split()[-1]))
-        efficiencies[energy] = np.mean(efficiencies[energy])
+        efficiencies[energy] = np.sum(efficiencies[energy])
     return efficiencies
 
 
@@ -105,13 +105,13 @@ def get_uncorrected_spectrum(folder_name: str) -> bq.Spectrum:
     return combined_spectrum
 
 
-def get_cps_peak(spectrum: bq.Spectrum, energy: int) -> float:
+def get_cps_peak(spectrum: bq.Spectrum, energy: int, custom_bounds: tuple[int, int] = None) -> float:
     # assume 2_000 bins from 0 to 2_000 keV
     cps_values = spectrum.cps_vals
     # print(cps_values)
     cps_values = np.maximum(cps_values, 0)
     spectrum_1s = bq.Spectrum(cps_values)
-    region_bounds = (int(max(1, energy - (90*energy/1100))), int(min(2_000, energy + (90*energy/1100))))
+    region_bounds = custom_bounds if custom_bounds else (int(max(1, energy - (90*energy/1100))), int(min(2_000, energy + (90*energy/1100))))
     # print(region_bounds)
     fitter = bq.Fitter(
     ["gauss"],
@@ -176,5 +176,5 @@ def read_n42(file: Path) -> bq.Spectrum:
 
 if __name__ == "__main__":
     # test manifest
-    # print(read_manifest())
+    print(read_manifest())
     print(read_efficiencies())
