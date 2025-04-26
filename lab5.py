@@ -51,8 +51,11 @@ def main():
     wave_names = [file.name.split('_')[4] for file in wave_files]
     plt.clf()
     for i, wave_name in enumerate(wave_names):
-        plt.plot(wave_data[i], label=wave_name)
+        plt.plot(np.arange(len(wave_data[i]))*2, wave_data[i]*(0.5/(2**14)), label=wave_name)
     plt.legend()
+    plt.xlim(0, 2000)
+    plt.xlabel("Time (ns)")
+    plt.ylabel("Voltage (V)")
     plt.savefig("waves.png")
     plt.close()
 
